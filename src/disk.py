@@ -13,32 +13,32 @@ warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
 from mosek.fusion import *
 import mosek.fusion.pythonic
 
-disk_name = 'disk2D'
+disk_name = 'disk_24'
 
-mesh_file = "../mesh/disk2D.xdmf" # .inp or .xdmf
+mesh_file = "../mesh/disk_fine.xdmf" # .inp or .xdmf
 mesh,pvmesh = read_mesh(mesh_file,get_pvmesh=True)
 metadata = {"quadrature_degree": 1, "quadrature_scheme": "default"}
 dxm = dx(metadata=metadata)
 
 
-####### manually define a gradient disk
-# 1. pure IN718
-comp_list = np.linspace(1.,1.,1) # a list defining the composition, e.g., [1,0.9,0.5,0.4,0.3]
+# ####### manually define a gradient disk
+# # 1. pure IN718
+# comp_list = np.linspace(1.,1.,1) # a list defining the composition, e.g., [1,0.9,0.5,0.4,0.3]
 
-# 2. IN718 - FINVAR
-# comp_list1 = np.linspace(1.,1.,101)
-# comp_list2 = np.linspace(1.,0.,22)[1:-1]
-# comp_list3 = np.linspace(0.,0.,15)
-# comp_list = np.concatenate((comp_list1,comp_list2,comp_list3))
+# # 2. IN718 - FINVAR
+# # comp_list1 = np.linspace(1.,1.,101)
+# # comp_list2 = np.linspace(1.,0.,22)[1:-1]
+# # comp_list3 = np.linspace(0.,0.,15)
+# # comp_list = np.concatenate((comp_list1,comp_list2,comp_list3))
 
-properties = get_properties(mesh,comp_list)
+# properties = get_properties(mesh,comp_list)
 
 
-# ##### read the property file
-# # mesh = scale_mesh(mesh, 0.1745590688908787, 0.01060179185682686, mesh.coordinates()[:,1].max())
-# comp_list = np.arange(100)
-# comp2prop = get_composition2property_from_csv('../disk_properties/{}_properties.csv'.format(disk_name))
-# properties = get_properties(mesh,comp_list,comp2prop)
+##### read the property file
+# mesh = scale_mesh(mesh, 0.1745590688908787, 0.01060179185682686, mesh.coordinates()[:,1].max())
+comp_list = np.arange(100)
+comp2prop = get_composition2property_from_csv('../disk_properties/{}_properties.csv'.format(disk_name))
+properties = get_properties(mesh,comp_list,comp2prop)
 
 
 t_rise = 1. # time to heat to the max temp.
